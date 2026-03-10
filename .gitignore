@@ -1,0 +1,30 @@
+# Data (17 GB)
+VAST-Challenge-2022/
+
+# Node
+client/node_modules/
+client/dist/
+
+# Python
+__pycache__/
+*.pyc
+
+# Old scripts and outputs
+build_visualizations.py
+run_duckdb_profile.py
+gen_docx.py
+gen_mockups.py
+capture_outputs.ps1
+condense_outputs.ps1
+exports/
+profiling_command_outputs/
+DATASET_PROFILE_REPORT.md
+VD_devoir_de_design.pdf
+
+# Misc
+courses/
+specs/
+ignore/
+nul
+.internal/
+.*/
