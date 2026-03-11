@@ -12,6 +12,8 @@ Interactive visualization of employer payroll trends across a simulated city of 
 ## Project Structure
 
 ```
+rapport-projet-VAST2022-MC3.md     Project report (source, Markdown)
+rapport-projet-VAST2022-MC3.docx   Project report (Word, generated)
 client/          React + Vite frontend (D3.js visualizations)
 server/          Flask API + data preprocessing
 server/data/     Precomputed JSON (included, ready to use)
@@ -68,6 +70,20 @@ This reads ~17 GB of CSVs via DuckDB and outputs `server/data/monthly.json` and 
 | Backend    | Flask, Flask-CORS                  |
 | Processing | DuckDB, Pandas, NumPy             |
 
+## Project Report
+
+The report is maintained as Markdown and converted to Word for submission.
+
+- **Source**: `rapport-projet-VAST2022-MC3.md` — edit this file
+- **Word export**: `rapport-projet-VAST2022-MC3.docx` — generated from the source
+
+To regenerate the `.docx` after editing the Markdown (requires [Pandoc](https://pandoc.org/)):
+
+```bash
+pandoc rapport-projet-VAST2022-MC3.md -o rapport-projet-VAST2022-MC3.docx \
+  --from markdown --to docx --table-of-contents --toc-depth=3 --metadata lang=fr-FR
+```
+
 ## Team
 
-Charafeddine, Ardian, Aurelien, Carla
+Charaf Eddine Benerrazam, Aurélien Mathis, Lynn Carla Maniboda Ngouanat, Adrian Maraj
