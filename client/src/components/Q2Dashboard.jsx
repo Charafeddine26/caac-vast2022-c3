@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchQ2Data, selectQ2DataStatus } from "../store/Q2DataSlice.js";
 import Q2ControlBar from "./q2/controlbar/Q2ControlBar.jsx";
 import AreaChartContainer from "./q2/areachart/AreaChartContainer.jsx";
+import BoxPlotContainer from "./q2/boxplot/BoxPlotContainer.jsx";
 import ResidentScatterContainer from "./q2/residentscatter/ResidentScatterContainer.jsx";
 import Q2Tooltip from "./q2/tooltip/Q2Tooltip.jsx";
 
@@ -30,10 +31,7 @@ export default function Q2Dashboard() {
         <AreaChartContainer />
       </div>
       <div className="panels-row">
-        <div className="boxplot-panel">
-          <h3 className="panel-title">Net Balance Distribution (per resident)</h3>
-          <p style={{ color: "#999" }}>Panel E — coming next</p>
-        </div>
+        <BoxPlotContainer />
       </div>
       <div className="panels-row">
         <ResidentScatterContainer />
