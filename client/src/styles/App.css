@@ -125,3 +125,63 @@ svg text {
   color: #bbb;
   cursor: not-allowed;
 }
+
+/* Q2 panels */
+.areachart-panel {
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 12px;
+  min-height: 400px;
+}
+
+.boxplot-panel {
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 12px;
+  min-height: 350px;
+}
+
+.resident-scatter-panel {
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 12px;
+  min-height: 400px;
+}
+
+.panel-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: #666;
+  margin: 0 0 8px 0;
+}
+
+/* Cluster buttons */
+.cluster-btn {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cluster-btn:hover {
+  background: #e8e8e8;
+}
+
+.cluster-btn.active {
+  font-weight: 500;
+}
+
+.cluster-swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  display: inline-block;
+}
