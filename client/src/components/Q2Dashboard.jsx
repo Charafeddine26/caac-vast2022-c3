@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchQ2Data, selectQ2DataStatus } from "../store/Q2DataSlice.js";
 import Q2ControlBar from "./q2/controlbar/Q2ControlBar.jsx";
+import ResidentScatterContainer from "./q2/residentscatter/ResidentScatterContainer.jsx";
 import Q2Tooltip from "./q2/tooltip/Q2Tooltip.jsx";
 
 export default function Q2Dashboard() {
@@ -37,10 +38,7 @@ export default function Q2Dashboard() {
         </div>
       </div>
       <div className="panels-row">
-        <div className="resident-scatter-panel">
-          <h3 className="panel-title">Resident Financial Trajectories</h3>
-          <p style={{ color: "#999" }}>Panel F — coming next</p>
-        </div>
+        <ResidentScatterContainer />
       </div>
       <Q2Tooltip />
     </>
