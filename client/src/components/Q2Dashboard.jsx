@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchQ2Data, selectQ2DataStatus } from "../store/Q2DataSlice.js";
 import Q2ControlBar from "./q2/controlbar/Q2ControlBar.jsx";
+import AreaChartContainer from "./q2/areachart/AreaChartContainer.jsx";
 import ResidentScatterContainer from "./q2/residentscatter/ResidentScatterContainer.jsx";
 import Q2Tooltip from "./q2/tooltip/Q2Tooltip.jsx";
 
@@ -26,10 +27,7 @@ export default function Q2Dashboard() {
     <>
       <Q2ControlBar />
       <div className="panels-row">
-        <div className="areachart-panel">
-          <h3 className="panel-title">Median Income vs Cost of Living</h3>
-          <p style={{ color: "#999" }}>Panel D — coming next</p>
-        </div>
+        <AreaChartContainer />
       </div>
       <div className="panels-row">
         <div className="boxplot-panel">
