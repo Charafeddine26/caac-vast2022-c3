@@ -24,5 +24,16 @@ def get_data():
     return jsonify({"monthly": monthly, "employers": employers})
 
 
+@app.route("/api/q2/data")
+def get_q2_data():
+    with open(os.path.join(DATA_DIR, "residents_monthly.json")) as f:
+        monthly = json.load(f)
+    with open(os.path.join(DATA_DIR, "residents_summary.json")) as f:
+        residents = json.load(f)
+    with open(os.path.join(DATA_DIR, "cluster_meta.json")) as f:
+        clusters = json.load(f)
+    return jsonify({"monthly": monthly, "residents": residents, "clusters": clusters})
+
+
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
