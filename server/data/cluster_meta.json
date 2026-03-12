@@ -1,0 +1,34 @@
+[
+  {
+    "cluster": 3,
+    "label": "Improving",
+    "count": 132,
+    "avg_income": 2549.35,
+    "avg_net_balance": 2434.64,
+    "color": "#2e7d32"
+  },
+  {
+    "cluster": 0,
+    "label": "Stable-High",
+    "count": 494,
+    "avg_income": 2800.8,
+    "avg_net_balance": 1335.62,
+    "color": "#1565c0"
+  },
+  {
+    "cluster": 1,
+    "label": "Stable",
+    "count": 311,
+    "avg_income": 5041.07,
+    "avg_net_balance": 3666.76,
+    "color": "#6a1b9a"
+  },
+  {
+    "cluster": 2,
+    "label": "Declining",
+    "count": 74,
+    "avg_income": 9903.0,
+    "avg_net_balance": 8690.08,
+    "color": "#c62828"
+  }
+]
