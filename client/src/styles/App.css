@@ -89,3 +89,39 @@
 svg text {
   font-size: 11px;
 }
+
+/* Tab bar */
+.tab-bar {
+  display: flex;
+  gap: 0;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.tab-btn:hover {
+  color: #333;
+}
+
+.tab-btn.active {
+  color: #1565c0;
+  border-bottom-color: #1565c0;
+  font-weight: 500;
+}
+
+.tab-btn:disabled {
+  color: #bbb;
+  cursor: not-allowed;
+}
