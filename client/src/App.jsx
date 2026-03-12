@@ -1,46 +1,19 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchData, selectDataStatus } from "./store/DataSetSlice.js";
-import ControlBar from "./components/controlbar/ControlBar.jsx";
-import TimeSeriesContainer from "./components/timeseries/TimeSeriesContainer.jsx";
-import BarChartContainer from "./components/barchart/BarChartContainer.jsx";
-import ScatterplotContainer from "./components/scatterplot/ScatterplotContainer.jsx";
-import Tooltip from "./components/tooltip/Tooltip.jsx";
+// client/src/App.jsx
+import { useSelector } from "react-redux";
+import { selectActiveTab } from "./store/NavigationSlice.js";
+import TabBar from "./components/TabBar.jsx";
+import Q1Dashboard from "./components/Q1Dashboard.jsx";
 import "./styles/App.css";
 
 function App() {
-  const dispatch = useDispatch();
-  const status = useSelector(selectDataStatus);
-
-  useEffect(() => {
-    dispatch(fetchData());
-  }, [dispatch]);
-
-  if (status === "loading")
-    return (
-      <div className="dashboard">
-        <p>Loading data...</p>
-      </div>
-    );
-  if (status === "failed")
-    return (
-      <div className="dashboard">
-        <p>Failed to load data.</p>
-      </div>
-    );
-  if (status !== "succeeded") return null;
+  const activeTab = useSelector(selectActiveTab);
 
   return (
     <div className="dashboard">
-      <ControlBar />
-      <div className="panels-row">
-        <TimeSeriesContainer />
-        <BarChartContainer />
-      </div>
-      <div className="panels-row">
-        <ScatterplotContainer />
-      </div>
-      <Tooltip />
+      <TabBar />
+      {activeTab === "q1" && <Q1Dashboard />}
+      {activeTab === "q2" && <p>Q2 dashboard coming next...</p>}
+      {activeTab === "q3" && <p>Q3 coming soon...</p>}
     </div>
   );
 }
