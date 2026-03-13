@@ -510,7 +510,66 @@ sémantiques facilitant la lecture des trajectoires financières.
 
 ### 4.3. Q3 — Dynamique d'emploi et turnover
 
-<!-- TODO -->
+Le tableau de bord Q3 est composé de trois panneaux coordonnés qui permettent d'analyser la
+dynamique d'emploi sous trois angles : la répartition spatio-temporelle du turnover (panneau G),
+le classement des employeurs (panneau H) et la corrélation entre turnover et attributs
+structurels (panneau I).
+
+#### 4.3.1. Panneau G — Carte de chaleur employeur × mois
+
+Ce panneau répond aux tâches *Summarize → Trends* et *Compare → Trends*. Il affiche une
+matrice où chaque cellule représente le taux de turnover d'un employeur pour un mois donné,
+colorée selon une palette séquentielle OrRd. Les employeurs sont triés par turnover moyen :
+les *N* plus instables en haut, les *N* plus stables en bas, séparés par une ligne pointillée.
+
+| Variable de données | Type (Munzner) | Marque / Canal visuel | Justification |
+|---------------------|---------------|----------------------|---------------|
+| Mois | Quantitatif ordonné | Position X (bande) | Échelle à bandes pour la discrétisation mensuelle |
+| Employeur | Catégoriel nominal (trié) | Position Y (bande) | Tri par turnover moyen pour faciliter la comparaison |
+| Taux de turnover mensuel | Quantitatif continu | Saturation de couleur (palette séquentielle OrRd) | Canal de couleur séquentiel adapté aux données positives (*Introduction*, p. 53). Les valeurs élevées (rouge foncé) attirent l'attention pré-attentive (*Introduction*, p. 18) |
+
+**Marque utilisée** : rectangle (*cell mark*), la marque canonique des techniques basées sur
+les tableaux pour données multidimensionnelles (Ghoniem & Médoc, 2026, *Multidimensionnelles*).
+Ce patron d'encodage est analogue à la matrice d'adjacence du tutoriel Tuto2 (Médoc, 2026),
+qui utilise un double encodage taille + couleur sur une grille de cellules — ici adapté à une
+matrice employeur × mois avec un encodage couleur séquentiel unique.
+
+#### 4.3.2. Panneau H — Diagramme en barres horizontales du turnover moyen
+
+Ce panneau répond aux tâches *Discover → Outliers* et *Compare → Trends*. Il classe les
+employeurs par taux de turnover moyen sous forme de barres horizontales : les *N* employeurs
+au turnover le plus élevé en rouge, les *N* plus stables en vert, avec une ligne de référence
+à la médiane.
+
+| Variable de données | Type (Munzner) | Marque / Canal visuel | Justification |
+|---------------------|---------------|----------------------|---------------|
+| Taux de turnover moyen | Quantitatif continu | Longueur de la barre (position X) | Position = canal le plus précis. Les barres horizontales permettent de lire les labels d'employeurs |
+| Employeur | Catégoriel nominal | Position Y (trié par turnover) | Classement visuel : fort turnover en haut, stable en bas |
+| Catégorie (top *N* / bottom *N*) | Catégoriel binaire | Teinte (rouge / vert) | Cohérence chromatique avec le panneau G. Rouge = instable, vert = stable |
+
+**Marque utilisée** : rectangle (*bar mark*), suivant le même patron que le panneau B (Q1).
+L'orientation horizontale assure la lisibilité des labels sans rotation de texte.
+
+#### 4.3.3. Panneau I — Nuage de points turnover vs taille et rémunération
+
+Ce panneau répond aux tâches *Identify → Correlation* et *Discover → Outliers*. Il représente
+chaque employeur dans un espace bidimensionnel croisant l'effectif moyen (X) et le taux de
+turnover moyen (Y), avec un double encodage supplémentaire en taille (total des départs) et en
+couleur (taux horaire moyen).
+
+| Variable de données | Type (Munzner) | Marque / Canal visuel | Justification |
+|---------------------|---------------|----------------------|---------------|
+| Effectif moyen (`avg_headcount`) | Quantitatif continu | Position X | Canal le plus précis pour les quantités (*Introduction*, p. 34) |
+| Taux de turnover moyen (`avg_turnover`) | Quantitatif continu | Position Y | Deuxième canal positionnel |
+| Total des départs (`total_departures`) | Quantitatif continu | Taille du cercle (`scaleSqrt`) | Troisième canal le plus efficace. Échelle en racine carrée pour la perception proportionnelle des aires |
+| Taux horaire moyen (`avg_hourly_rate`) | Quantitatif continu | Couleur (palette séquentielle RdYlGn) | Canal de couleur divergent : vert = bien rémunéré, rouge = faiblement rémunéré. Double encodage justifié par la perception pré-attentive (*Introduction*, p. 18) |
+
+**Marque utilisée** : point (*dot mark*), suivant le même patron multi-encodé que les
+panneaux C (Q1) et F (Q2). Ce scatterplot encode quatre attributs simultanément, illustrant la
+technique du scatterplot pour données multidimensionnelles (Ghoniem & Médoc, 2026,
+*Multidimensionnelles*) et s'inscrivant dans la lignée du tutoriel Tuto5 (Médoc, 2026). Deux
+légendes (gradient de couleur + cercles de taille) accompagnent le graphique pour assurer la
+lisibilité des deux canaux non positionnels.
 
 ### 4.4. Vues coordonnées et interaction
 
