@@ -12,38 +12,40 @@ Charaf Eddine Benerrazam, Aurélien Mathis, Lynn Carla Maniboda Ngouanat, Adrian
 ## 1. Introduction
 
 Le présent rapport décrit la conception et l'implémentation d'un tableau de bord interactif
-répondant à la Question 1 (Q1) du mini-challenge économique du VAST Challenge 2022 :
+répondant aux trois questions économiques (Q1, Q2, Q3) du mini-challenge 3 du VAST
+Challenge 2022. Le jeu de données simule la vie quotidienne de 1 011 résidents de la ville
+fictive d'Engagement, Ohio, sur une période de 15 mois (mars 2022 – mai 2023). Ces données
+sont collectées via une application municipale d'urbanisme participatif et couvrent les
+activités, les transactions financières et les affectations professionnelles de chaque résident.
 
-> *« Over the period covered by the dataset, which businesses appear to be more prosperous?
-> Which appear to be struggling? Describe your rationale. »*
+Les trois questions posées par le challenge sont les suivantes :
 
-Le jeu de données simule la vie quotidienne d'environ 1 011 résidents de la ville fictive d'Engagement, Ohio, sur une période de 15 mois (mars 2022 – mai 2023). Ces données sont
-collectées via une application municipale d'urbanisme participatif. La municipalité souhaite
-exploiter ces informations pour orienter l'allocation d'une subvention de renouvellement urbain.
-
-Nous nous concentrons exclusivement sur les 253 employeurs, qui représentent les entreprises
-dans ce jeu de données. En l'absence de chiffre d'affaires directement disponible, nous
-définissons deux indicateurs indirects de santé économique :
-
-- **Prospérité** : croissance ou stabilité des effectifs accompagnée d'une masse salariale
-  constante ou croissante — signe que l'entreprise génère assez de revenus pour recruter et
-  rémunérer ses salariés.
-- **Difficulté** : baisse du nombre d'employés ou diminution drastique des salaires versés —
-  signal que l'entreprise n'a plus les moyens de soutenir son activité.
+- **Q1 — Prospérité des employeurs.** *« Over the period covered by the dataset, which
+  businesses appear to be more prosperous? Which appear to be struggling? Describe your
+  rationale. »* — Identifier les entreprises qui prospèrent et celles qui déclinent, en
+  l'absence de chiffre d'affaires direct.
+- **Q2 — Santé financière des résidents.** *« How do residents' incomes, expenses, and savings
+  evolve over the 15 months? »* — Analyser l'évolution des revenus, des dépenses et de
+  l'épargne des résidents pour évaluer leur bien-être financier.
+- **Q3 — Dynamique d'emploi et turnover.** *« Which employers have high staff turnover, which
+  retain employees, and what characterizes each group? »* — Examiner la stabilité de l'emploi
+  chez les différents employeurs et les facteurs associés au turnover.
 
 Notre approche s'inscrit dans le modèle imbriqué de Munzner (2014), qui structure la conception
-d'une visualisation en quatre niveaux : caractérisation du domaine, abstraction des données et
-des tâches, encodage visuel et interaction, et choix algorithmiques et d'implémentation. Le
-rapport suit cette progression.
+d'une visualisation en quatre niveaux : caractérisation du domaine (N1), abstraction des données
+et des tâches (N2), encodage visuel et interaction (N3), et choix algorithmiques et
+d'implémentation (N4). Les sections 2 à 4 déclinent chaque niveau par question, tandis que la
+section 5 (architecture) est partagée car les trois tableaux de bord reposent sur la même pile
+technique et le même patron de conception.
 
-Le tableau de bord se compose de trois vues coordonnées — une série temporelle, un diagramme
-en barres divergent et un nuage de points multi-encodé — synchronisées par un état partagé,
-permettant à l'utilisateur de passer d'une vue d'ensemble à l'examen détaillé de chaque
-employeur selon le mantra de Shneiderman (1996) : *overview first, zoom and filter, then
-details-on-demand*.
+L'application prend la forme d'une interface à onglets (Q1, Q2, Q3), chaque onglet ouvrant un
+tableau de bord composé de trois vues coordonnées — soit neuf panneaux au total. Chaque
+système de vues est synchronisé par un *store* Redux dédié et permet à l'utilisateur de passer
+d'une vue d'ensemble à l'examen détaillé selon le mantra de Shneiderman (1996) : *overview
+first, zoom and filter, then details-on-demand*.
 
-Ce rapport fait suite au rapport de conception de données (Benerrazam, Mathis, Ngouanat & Maraj, 2025) soumis
-en amont de l'implémentation, dont il reprend et approfondit l'analyse.
+Ce rapport fait suite au rapport de conception de données (Benerrazam, Mathis, Ngouanat &
+Maraj, 2025) soumis en amont de l'implémentation, dont il reprend et approfondit l'analyse.
 
 ---
 
