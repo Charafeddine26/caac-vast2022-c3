@@ -1,5 +1,5 @@
 // client/src/components/q3/tooltip/Q3Tooltip.jsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { selectQ3Employers } from "../../../store/Q3DataSlice.js";
 import { selectQ3HoveredEmployer } from "../../../store/Q3InteractionSlice.js";
@@ -14,6 +14,14 @@ export default function Q3Tooltip() {
     window.addEventListener("mousemove", handler);
     return () => window.removeEventListener("mousemove", handler);
   }, []);
+
+  // Precompute rank map (sorted by turnover descending)
+  const rankMap = useMemo(() => {
+    const sorted = [...employers].sort((a, b) => b.avg_turnover - a.avg_turnover);
+    const map = {};
+    sorted.forEach((d, i) => { map[d.employerId] = i + 1; });
+    return map;
+  }, [employers]);
 
   if (hoveredId === null) return null;
 
@@ -38,6 +46,9 @@ export default function Q3Tooltip() {
       }}
     >
       <div style={{ fontWeight: "bold" }}>Employer {emp.employerId}</div>
+      <div style={{ color: "#888", fontSize: "11px" }}>
+        Rank #{rankMap[emp.employerId]} of {employers.length} by turnover
+      </div>
       <hr style={{ margin: "4px 0", border: "none", borderTop: "1px solid #eee" }} />
       <div>Avg headcount: {emp.avg_headcount.toFixed(1)}</div>
       <div>Avg turnover: {(emp.avg_turnover * 100).toFixed(1)}%</div>

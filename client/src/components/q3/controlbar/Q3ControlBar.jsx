@@ -14,11 +14,9 @@ export default function Q3ControlBar() {
 
   return (
     <div className="controlbar">
-      <h1 style={{ fontSize: "16px", margin: 0 }}>
-        VAST 2022 -- Employment Dynamics
-      </h1>
+      <h1>VAST 2022 — Employment Dynamics</h1>
       <label>
-        Show top/bottom:
+        Top/bottom employers by turnover:
         <input
           type="number"
           min={1}
