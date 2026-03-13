@@ -622,34 +622,55 @@ fluide.
 Notre architecture suit le patron d'architecture Modèle-Vue-Contrôleur (MVC) tel qu'enseigné
 dans les tutoriels du cours (Médoc, 2026, Tuto4, *D3js in React*) et étendu avec Redux
 (Tuto5, *MultiDim Redux*). Ce patron assure la séparation des responsabilités entre les
-composants.
+composants. L'ensemble des trois tableaux de bord partage la même pile technique et le même
+patron de conception ; seuls les *slices* Redux, les classes D3 et les conteneurs React
+diffèrent d'un onglet à l'autre.
 
 ### 5.1. Architecture client-serveur
 
 L'application se décompose en deux modules :
 
 - **Serveur** (Python + Flask) : prétraitement des 17 Go de données brutes via DuckDB
-  (requêtes SQL en mémoire), puis exposition d'un unique point d'accès REST
-  (`/api/data`) qui sert les deux fichiers JSON agrégés (`monthly.json` et
-  `employers.json`). Ce choix est inspiré de l'architecture client-serveur des tutoriels
-  Tuto6 et Tuto7 (Médoc, 2026), où un serveur Flask avec CORS fournit les données
-  traitées au client React.
+  (requêtes SQL en mémoire), puis exposition de trois points d'accès REST — un par question :
+
+  | Point d'accès | Données servies | Fichiers JSON |
+  |---------------|-----------------|---------------|
+  | `/api/data` | Q1 — prospérité des employeurs | `monthly.json`, `employers.json` |
+  | `/api/q2data` | Q2 — santé financière des résidents | `residents_monthly.json`, `residents_summary.json`, `cluster_meta.json` |
+  | `/api/q3data` | Q3 — dynamique d'emploi et turnover | `turnover_monthly.json`, `employers_turnover.json` |
+
+  Ce choix est inspiré de l'architecture client-serveur des tutoriels Tuto6 et Tuto7
+  (Médoc, 2026), où un serveur Flask avec CORS fournit les données traitées au client React.
 
 - **Client** (React 19 + Vite + D3.js 7.9 + Redux Toolkit) : application
-  monopage qui charge les données au démarrage, les stocke dans un *store* Redux, et rend
-  les trois panneaux de visualisation.
+  monopage à onglets qui charge les données de chaque question de manière paresseuse (le
+  chargement n'est déclenché qu'à l'activation de l'onglet correspondant) et les stocke dans
+  un *store* Redux unique.
 
 ### 5.2. Patron MVC avec Redux
 
-Le tableau ci-dessous montre la correspondance entre les rôles MVC, nos fichiers, et les
-concepts des tutoriels :
+Le tableau ci-dessous montre la correspondance entre les rôles MVC, nos fichiers et les
+concepts des tutoriels pour l'ensemble des trois tableaux de bord :
 
-| Rôle MVC | Fichier(s) | Patron tutoriel |
-|----------|-----------|-----------------|
-| **Modèle** (données) | `store/DataSetSlice.js` — *slice* Redux avec `createAsyncThunk` pour le chargement asynchrone et `extraReducers` pour gérer les états *pending*, *fulfilled*, *rejected* | `DataSetSlice.js` (Tuto5) |
-| **Modèle** (interaction) | `store/InteractionSlice.js` — *slice* Redux avec les *reducers* `setHoveredEmployer`, `toggleSelectedEmployer`, `clearSelection`, `setTopN` | `ItemInteractionSlice.js` (Tuto6) |
-| **Contrôleur** | `TimeSeriesContainer.jsx`, `BarChartContainer.jsx`, `ScatterplotContainer.jsx` — composants React qui lisent le *store* via `useSelector` et transmettent les données et les méthodes de contrôle à la vue D3 | `ScatterplotContainer.js` (Tuto5) |
-| **Vue** | `TimeSeriesD3.js`, `BarChartD3.js`, `ScatterplotD3.js` — classes ES6 encapsulant tout le code D3, instanciées via `useRef` et pilotées par les *hooks* `useEffect` du contrôleur | `Matrix-d3.js` (Tuto4), `Scatterplot-d3.js` (Tuto5) |
+**Slices Redux (Modèle) :**
+
+| Slice | Rôle | Patron tutoriel |
+|-------|------|-----------------|
+| `DataSetSlice.js` | Chargement asynchrone des données Q1 (`createAsyncThunk` + `extraReducers` pending/fulfilled/rejected) | `DataSetSlice.js` (Tuto5) |
+| `InteractionSlice.js` | Hover/sélection Q1 : `hoveredEmployerId`, `selectedEmployerIds`, `topN` | `ItemInteractionSlice.js` (Tuto6) |
+| `Q2DataSlice.js` | Chargement asynchrone des données Q2 (monthly + residents + clusters) | `DataSetSlice.js` (Tuto5) |
+| `Q2InteractionSlice.js` | Hover/sélection Q2 : `hoveredResidentId`, `hoveredMonth`, `selectedResidentIds`, `selectedCluster` | `ItemInteractionSlice.js` (Tuto6) |
+| `Q3DataSlice.js` | Chargement asynchrone des données Q3 (monthly + employers) | `DataSetSlice.js` (Tuto5) |
+| `Q3InteractionSlice.js` | Hover/sélection Q3 : `hoveredEmployerId`, `selectedEmployerIds`, `topN` | `InteractionSlice.js` (Q1) |
+| `NavigationSlice.js` | Onglet actif (`activeTab` : q1, q2, q3) | Original (pas d'équivalent tutoriel) |
+
+**Conteneurs React (Contrôleur) et classes D3 (Vue) :**
+
+| Tableau de bord | Conteneurs (Contrôleur) | Classes D3 (Vue) | Patron tutoriel |
+|-----------------|------------------------|------------------|-----------------|
+| Q1 | `TimeSeriesContainer`, `BarChartContainer`, `ScatterplotContainer` | `TimeSeriesD3`, `BarChartD3`, `ScatterplotD3` | `ScatterplotContainer.js` (Tuto5), `Matrix-d3.js` (Tuto4) |
+| Q2 | `AreaChartContainer`, `BoxPlotContainer`, `ResidentScatterContainer` | `AreaChartD3`, `BoxPlotD3`, `ResidentScatterD3` | Même patron Tuto4/5 |
+| Q3 | `HeatmapContainer`, `TurnoverBarContainer`, `TurnoverScatterContainer` | `HeatmapD3`, `TurnoverBarD3`, `TurnoverScatterD3` | Même patron Tuto4/5 ; `HeatmapD3` s'inspire de `Matrix-d3.js` (Tuto2/4) |
 
 ### 5.3. Cycle de vie des composants
 
@@ -671,7 +692,8 @@ introduit dans le tutoriel Tuto4 (Médoc, 2026, *D3js in React*) :
 
 Pour éviter les effets de bord (*side effects*), la référence à l'instance D3 est maintenue
 via le *hook* `useRef` — la classe D3 vit en dehors du cycle de rendu de React, conformément
-au principe de séparation des responsabilités enseigné dans le tutoriel Tuto4.
+au principe de séparation des responsabilités enseigné dans le tutoriel Tuto4. Ce cycle de vie
+est identique pour les neuf classes D3 de l'application.
 
 ### 5.4. Séparation update / updateHighlighting
 
@@ -680,7 +702,7 @@ expose une méthode `updateHighlighting(hoveredId, selectedIds)` distincte de `u
 séparation des responsabilités garantit que les changements d'état d'interaction (survol, clic)
 ne déclenchent pas un rebindage complet des données — seules les propriétés visuelles
 (opacité, épaisseur de contour, couleur de surbrillance) sont modifiées. Cela assure une
-réactivité fluide même avec 253 éléments simultanés.
+réactivité fluide même avec plusieurs centaines d'éléments simultanés.
 
 ### 5.5. Méthodes du contrôleur
 
@@ -697,23 +719,49 @@ const controllerMethods = {
 
 La classe D3 attache ces méthodes aux événements `mouseenter`, `mouseleave` et `click` de
 chaque élément SVG. Ainsi, l'interaction utilisateur remonte du DOM vers le *store* Redux via
-le contrôleur, puis redescend vers les trois vues coordonnées — boucle MVC complète.
+le contrôleur, puis redescend vers les trois vues coordonnées — boucle MVC complète. Ce patron
+est répliqué dans les neuf conteneurs de l'application, avec des actions Redux adaptées à
+chaque *slice* d'interaction.
 
-### 5.6. Pipeline de prétraitement
+### 5.6. Navigation par onglets
 
-Le serveur exécute un pipeline SQL via DuckDB qui transforme les 113 millions de lignes
-d'Activity Logs et les 1,8 million de transactions du Financial Journal en deux fichiers JSON
-compacts :
+L'application propose trois onglets (Q1, Q2, Q3) gérés par un composant `TabBar.jsx` et un
+*slice* Redux dédié (`NavigationSlice.js`) :
 
-1. **Jointure temporelle** : pour chaque participant et chaque mois, identifier le dernier
-   `jobId` observé dans les Activity Logs, puis résoudre l'`employerId` correspondant via
-   la table Jobs.
-2. **Agrégation des salaires** : sommer les montants « Wage » du Financial Journal par
-   `employerId` et par mois, compter les participants distincts.
-3. **Calcul des pentes** : pour chaque employeur, calculer la régression linéaire de la masse
-   salariale et de l'effectif sur les 15 mois.
-4. **Export JSON** : `monthly.json` (séries temporelles) et `employers.json` (résumé par
-   employeur avec pentes et totaux).
+- `TabBar.jsx` rend trois boutons et dispatch l'action `setActiveTab` au clic.
+- `NavigationSlice.js` maintient un état unique `activeTab` (valeur par défaut : `"q1"`).
+- `App.jsx` effectue un rendu conditionnel en fonction de `activeTab`, montant le tableau de
+  bord correspondant et déclenchant le chargement paresseux des données associées.
+
+Ce mécanisme de chargement paresseux (*lazy loading*) évite de charger les données des trois
+questions au démarrage : seules les données de l'onglet actif sont récupérées via
+`createAsyncThunk`, les autres étant chargées à la première activation de leur onglet.
+
+### 5.7. Pipelines de prétraitement
+
+Trois scripts Python transforment les données brutes en fichiers JSON compacts consommables
+par le client :
+
+| Script | Entrées | Technique | Sorties |
+|--------|---------|-----------|---------|
+| `preprocess.py` | Activity Logs (113,9 M lignes) + Financial Journal (1,8 M lignes) + Jobs | DuckDB : jointure temporelle, agrégation mensuelle, régression linéaire | `monthly.json`, `employers.json` |
+| `preprocess_q2.py` | Financial Journal + Participants | DuckDB : agrégation par catégorie + scikit-learn KMeans (méthode du coude) | `residents_monthly.json`, `residents_summary.json`, `cluster_meta.json` |
+| `preprocess_q3.py` | Activity Logs + Jobs | DuckDB : détection d'arrivées/départs par comparaison d'affectations mois à mois, calcul du turnover normalisé | `turnover_monthly.json`, `employers_turnover.json` |
+
+Le pipeline Q1 (`preprocess.py`) suit quatre étapes : (1) jointure temporelle pour résoudre
+l'employeur de chaque participant par mois, (2) agrégation des salaires par employeur et par
+mois, (3) calcul des pentes par régression linéaire sur les 15 mois, (4) export JSON.
+
+Le pipeline Q2 (`preprocess_q2.py`) ajoute une étape de clustering : après le calcul des
+pentes et des moyennes par résident, les indicateurs sont normalisés puis soumis à un KMeans
+(scikit-learn) dont le *k* optimal est déterminé par la méthode du coude. Les labels de
+cluster (Improving, Stable, Declining) sont attribués en fonction de la position des
+centroïdes.
+
+Le pipeline Q3 (`preprocess_q3.py`) reconstitue les flux de main-d'œuvre en comparant les
+affectations mensuelles : une arrivée est détectée lorsqu'un participant apparaît chez un
+nouvel employeur, un départ lorsqu'il quitte un employeur. Le taux de turnover mensuel est
+normalisé par l'effectif pour permettre la comparaison entre employeurs de tailles différentes.
 
 ---
 
