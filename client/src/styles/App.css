@@ -185,3 +185,28 @@ svg text {
   border-radius: 2px;
   display: inline-block;
 }
+
+/* Q3 panels */
+.heatmap-panel {
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 12px;
+  min-height: 400px;
+}
+
+.turnoverbar-panel {
+  flex: 1;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 12px;
+  min-height: 400px;
+}
+
+.turnoverscatter-panel {
+  flex: 2;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 12px;
+  min-height: 400px;
+}
