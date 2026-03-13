@@ -446,7 +446,67 @@ exemple un employeur dont la masse salariale croît mais qui perd des employés.
 
 ### 4.2. Q2 — Santé financière des résidents
 
-<!-- TODO -->
+Le tableau de bord Q2 est composé de trois panneaux coordonnés qui permettent d'analyser la
+situation financière des résidents à trois niveaux de granularité : agrégé par catégorie de
+dépense (panneau D), distribué par mois (panneau E), et individuel dans l'espace des pentes
+(panneau F).
+
+#### 4.2.1. Panneau D — Diagramme à aires empilées avec ligne de revenu
+
+Ce panneau répond aux tâches *Summarize → Trends* et *Compare → Distribution*. Il superpose
+l'évolution des dépenses mensuelles (aires empilées par catégorie) et du revenu (ligne
+superposée), permettant de visualiser simultanément la structure des dépenses et le différentiel
+revenu/dépenses. Lorsqu'un cluster est sélectionné, le panneau affiche les médianes du cluster
+avec des lignes pointillées de référence représentant les médianes de l'ensemble des résidents.
+
+| Variable de données | Type (Munzner) | Marque / Canal visuel | Justification |
+|---------------------|---------------|----------------------|---------------|
+| Mois | Quantitatif ordonné | Position X | Canal le plus précis pour les données temporelles (*Introduction*, p. 34) |
+| Montant des dépenses | Quantitatif continu | Position Y (empilée) | Les aires empilées montrent à la fois les parts relatives et le total |
+| Catégorie de dépense (Shelter, Food, Recreation, Education) | Catégoriel nominal | Teinte (palette catégorielle) | Canal le plus efficace pour le nominal (*Introduction*, p. 53). Quatre teintes distinctes permettent l'identification pré-attentive de chaque poste |
+| Revenu mensuel | Quantitatif continu | Ligne superposée (position Y) | La distinction marque ligne vs marque aire sépare visuellement revenu et dépenses sans ajouter de dimension spatiale |
+
+**Marques utilisées** : aire (*area mark*) pour les dépenses empilées, ligne (*line mark*)
+pour le revenu. Cette combinaison relève des techniques axiales pour données
+multidimensionnelles (Ghoniem & Médoc, 2026, *Multidimensionnelles*).
+
+#### 4.2.2. Panneau E — Boîte à moustaches du solde net mensuel
+
+Ce panneau répond aux tâches *Compare → Distribution* et *Discover → Outliers*. Il affiche la
+distribution du solde net (revenu − dépenses) sous forme de boîtes à moustaches mensuelles,
+permettant de suivre l'évolution de la dispersion et de la position centrale au fil du temps.
+Lorsqu'un résident est survolé ou sélectionné, sa trajectoire individuelle est superposée aux
+boîtes.
+
+| Variable de données | Type (Munzner) | Marque / Canal visuel | Justification |
+|---------------------|---------------|----------------------|---------------|
+| Mois | Quantitatif ordonné | Position X (bande) | Échelle à bandes pour juxtaposer les distributions mensuelles |
+| Solde net | Quantitatif continu | Position Y | Canal le plus précis pour les quantités financières |
+| Quartiles, médiane, moustaches | Quantitatif continu | Marque composite box-whisker | Représentation canonique de la distribution — Q1, médiane, Q3, moustaches et outliers |
+| Cluster du résident | Catégoriel nominal | Teinte (points outliers et trajectoire) | Cohérence chromatique avec le panneau F pour le suivi inter-vues |
+
+**Marque utilisée** : marque composite boîte-à-moustaches (*box-whisker mark*), complétée par
+des points (*dot marks*) pour les outliers et les trajectoires individuelles.
+
+#### 4.2.3. Panneau F — Nuage de points des résidents par cluster
+
+Ce panneau répond aux tâches *Discover → Clusters* et *Discover → Outliers*. Il représente
+chaque résident dans l'espace bidimensionnel des pentes (pente du revenu en X, pente du solde
+net en Y), coloré par cluster et dimensionné par le revenu moyen. Quatre labels de quadrant
+(Improving, Declining, Cutting costs, Cost of living rising) guident l'interprétation.
+
+| Variable de données | Type (Munzner) | Marque / Canal visuel | Justification |
+|---------------------|---------------|----------------------|---------------|
+| Pente du revenu (`income_slope`) | Quantitatif divergent | Position X | Dimension clé → canal le plus précis |
+| Pente du solde net (`net_balance_slope`) | Quantitatif divergent | Position Y | Deuxième canal positionnel |
+| Cluster | Catégoriel nominal | Teinte (palette ordinale) | Canal le plus efficace pour le nominal (*Introduction*, p. 53). Les clusters (Improving, Stable, Declining) sont immédiatement distinguables |
+| Revenu moyen (`avg_income`) | Quantitatif continu | Taille du cercle (`scaleSqrt`) | Troisième canal le plus efficace (*Introduction*, p. 34). Échelle en racine carrée pour la perception proportionnelle des aires |
+
+**Marque utilisée** : point (*dot mark*), suivant le même patron que le panneau C (Q1). Ce
+scatterplot multi-encodé est directement inspiré du tutoriel Tuto5 (Médoc, 2026) et illustre
+la technique du scatterplot pour données multidimensionnelles (Ghoniem & Médoc, 2026,
+*Multidimensionnelles*). Les lignes de référence à zéro divisent l'espace en quatre quadrants
+sémantiques facilitant la lecture des trajectoires financières.
 
 ### 4.3. Q3 — Dynamique d'emploi et turnover
 
