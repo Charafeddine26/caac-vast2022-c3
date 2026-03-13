@@ -573,32 +573,42 @@ lisibilité des deux canaux non positionnels.
 
 ### 4.4. Vues coordonnées et interaction
 
-Les trois panneaux fonctionnent comme un système de vues coordonnées multiples (*coordinated
-multiple views*), concept central du cours sur les données multidimensionnelles (Ghoniem &
-Médoc, 2026, *Multidimensionnelles*) et mis en œuvre dans les tutoriels Tuto5 et Tuto6
-(Médoc, 2026).
+Chacun des trois tableaux de bord fonctionne comme un système de vues coordonnées multiples
+(*coordinated multiple views*), concept central du cours sur les données multidimensionnelles
+(Ghoniem & Médoc, 2026, *Multidimensionnelles*) et mis en œuvre dans les tutoriels Tuto5 et
+Tuto6 (Médoc, 2026).
 
-La coordination repose sur un état partagé (*store* Redux) qui maintient deux variables
-d'interaction :
+La coordination repose, pour chaque tableau de bord, sur un *slice* Redux d'interaction dédié
+qui maintient les variables d'état suivantes :
 
-- **`hoveredEmployerId`** : l'identifiant de l'employeur survolé par le curseur.
-- **`selectedEmployerIds`** : la liste des employeurs sélectionnés par clic.
+| Tableau de bord | Slice d'interaction | Variables d'état |
+|-----------------|---------------------|------------------|
+| Q1 | `InteractionSlice` | `hoveredEmployerId`, `selectedEmployerIds`, `topN` |
+| Q2 | `Q2InteractionSlice` | `hoveredResidentId`, `hoveredMonth`, `selectedResidentIds`, `selectedCluster` |
+| Q3 | `Q3InteractionSlice` | `hoveredEmployerId`, `selectedEmployerIds`, `topN` |
 
-Lorsque l'utilisateur survole un employeur dans n'importe quel panneau, les trois vues
-réagissent simultanément : l'élément survolé est mis en relief (opacité et épaisseur de
-contour accrues) tandis que les autres éléments sont atténués. Ce mécanisme de *brushing and
-linking* permet de suivre un même employeur à travers les trois représentations visuelles
-complémentaires.
+Le mécanisme de *brushing and linking* est identique dans les trois cas : lorsque l'utilisateur
+survole un élément dans n'importe quel panneau, les trois vues du tableau de bord actif
+réagissent simultanément — l'élément survolé est mis en relief (opacité et épaisseur de
+contour accrues) tandis que les autres éléments sont atténués. Ce patron d'interaction
+coordonnée est directement issu du tutoriel Tuto6 (Médoc, 2026), où le survol d'un nœud dans
+le diagramme en réseau met en surbrillance les éléments correspondants dans les autres vues.
 
-L'ensemble du tableau de bord suit le mantra de Shneiderman (1996) :
+Le tableau de bord Q2 introduit une dimension d'interaction supplémentaire : la **sélection de
+cluster**. Lorsqu'un cluster est sélectionné dans le panneau F (scatter), les panneaux D (aires
+empilées) et E (boîtes à moustaches) se reconfigurent pour afficher les données spécifiques à
+ce cluster, avec des lignes de référence pointillées montrant les médianes de l'ensemble des
+résidents — patron *focus + context*.
 
-1. **Vue d'ensemble** (*overview*) : les trois panneaux affichent simultanément les données de
-   l'ensemble des 253 employeurs (panneau C) ou des top/bottom *N* (panneaux A et B).
-2. **Zoom et filtrage** (*zoom and filter*) : le contrôle `topN` dans la barre de commande
-   permet de restreindre le nombre d'employeurs mis en avant dans les panneaux A et B.
-3. **Détails à la demande** (*details-on-demand*) : le survol d'un employeur affiche une
-   infobulle contextuelle indiquant son identifiant, son effectif moyen, sa pente salariale,
-   sa pente d'effectif et sa masse salariale totale.
+L'ensemble de l'application suit le mantra de Shneiderman (1996) :
+
+1. **Vue d'ensemble** (*overview*) : chaque tableau de bord affiche simultanément les données
+   de l'ensemble des entités (employeurs ou résidents) dans ses trois panneaux.
+2. **Zoom et filtrage** (*zoom and filter*) : les contrôles `topN` (Q1, Q3) et la sélection de
+   cluster (Q2) permettent de restreindre le sous-ensemble mis en avant.
+3. **Détails à la demande** (*details-on-demand*) : le survol affiche une infobulle
+   contextuelle adaptée à chaque tableau de bord — identifiant, métriques clés et rang de
+   turnover (Q3) ou cluster d'appartenance (Q2).
 
 ---
 
