@@ -22,6 +22,26 @@ export default function HeatmapContainer() {
   const selectedIds = useSelector(selectQ3SelectedEmployers);
   const topN = useSelector(selectQ3TopN);
 
+  // Filter to top N + bottom N employers by avg_turnover
+  const { filteredMonthly, filteredEmployers, topIds, bottomIds } = useMemo(() => {
+    const sorted = [...employers].sort((a, b) => b.avg_turnover - a.avg_turnover);
+    const topSlice = sorted.slice(0, topN);
+    const bottomSlice = sorted.slice(-topN);
+    const seen = new Set();
+    const unique = [...topSlice, ...bottomSlice].filter((d) => {
+      if (seen.has(d.employerId)) return false;
+      seen.add(d.employerId);
+      return true;
+    });
+    const idSet = new Set(unique.map((d) => d.employerId));
+    return {
+      filteredMonthly: monthly.filter((d) => idSet.has(d.employerId)),
+      filteredEmployers: unique,
+      topIds: new Set(topSlice.map((d) => d.employerId)),
+      bottomIds: new Set(bottomSlice.map((d) => d.employerId)),
+    };
+  }, [employers, monthly, topN]);
+
   const controllerMethods = useMemo(
     () => ({
       handleHover: (id) => dispatch(setQ3HoveredEmployer(id)),
@@ -39,10 +59,10 @@ export default function HeatmapContainer() {
   }, [controllerMethods]);
 
   useEffect(() => {
-    if (d3Ref.current && monthly.length > 0) {
-      d3Ref.current.update(monthly, employers, topN);
+    if (d3Ref.current && filteredMonthly.length > 0) {
+      d3Ref.current.update(filteredMonthly, filteredEmployers, topIds, bottomIds);
     }
-  }, [monthly, employers, topN]);
+  }, [filteredMonthly, filteredEmployers, topIds, bottomIds]);
 
   useEffect(() => {
     if (d3Ref.current) {
