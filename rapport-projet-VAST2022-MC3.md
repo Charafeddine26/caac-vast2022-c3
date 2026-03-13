@@ -359,8 +359,6 @@ de turnover par employeur) et `employers_turnover.json` (résumé par employeur)
 
 ## 4. Encodage visuel et interaction (Munzner — niveau 3)
 
-### 4.1. Q1 — Prospérité des employeurs
-
 Le troisième niveau du modèle imbriqué concerne les choix d'encodage visuel : quelles marques
 graphiques utiliser, quels canaux visuels leur associer, et comment articuler les vues entre
 elles. La menace à ce niveau est le choix d'un encodage inefficace (Munzner, 2014, ch. 5) :
@@ -372,6 +370,12 @@ est le canal le plus précis, suivi de la longueur, puis de la taille ; pour les
 catégorielles, la teinte est le canal le plus efficace. La perception pré-attentive
 (*Introduction*, p. 18) guide le choix des encodages redondants qui permettent une détection
 rapide et parallèle des motifs visuels.
+
+Chaque question dispose de trois panneaux coordonnés — soit neuf panneaux au total. Les
+sous-sections 4.1 à 4.3 détaillent l'encodage de chaque panneau ; la sous-section 4.4 décrit
+les mécanismes de coordination et d'interaction communs aux trois tableaux de bord.
+
+### 4.1. Q1 — Prospérité des employeurs
 
 #### 4.1.1. Panneau A — Séries temporelles de l'évolution financière
 
