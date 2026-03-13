@@ -51,28 +51,48 @@ Maraj, 2025) soumis en amont de l'implémentation, dont il reprend et approfondi
 
 ## 2. Analyse du domaine (Munzner — niveau 1)
 
+Le premier niveau du modèle imbriqué de Munzner (2014) consiste à caractériser le problème de
+domaine : qui sont les utilisateurs cibles, quelles décisions doivent-ils prendre, et quelles
+questions se posent-ils ? La taxonomie des tâches (Ghoniem & Médoc, 2026, *Introduction*,
+p. 70–72) fournit le cadre pour décomposer chaque question en objectifs analytiques concrets.
+
 ### 2.1. Contexte général
 
-<!-- TODO -->
+Le VAST Challenge 2022 simule la ville fictive d'Engagement, Ohio, dont la municipalité
+dispose de données issues d'une application d'urbanisme participatif. Ces données couvrent les
+activités quotidiennes de 1 011 résidents sur 15 mois (mars 2022 – mai 2023) : déplacements,
+affectations professionnelles, transactions financières et interactions sociales. La
+municipalité souhaite exploiter ces informations pour orienter ses politiques publiques —
+notamment l'allocation d'une subvention de renouvellement urbain.
+
+**Utilisateurs cibles.** Les décideurs municipaux chargés de ces politiques. Ils n'ont pas
+d'expertise en analyse de données et ont besoin d'un outil visuel leur permettant d'explorer
+la dynamique économique de la ville sous trois angles complémentaires : la prospérité des
+entreprises (Q1), le bien-être financier des résidents (Q2) et la stabilité de l'emploi (Q3).
+
+**Questions analytiques.** Le mini-challenge économique pose trois questions, que nous
+traitons chacune dans un tableau de bord dédié au sein d'une application à onglets. Les
+sous-sections suivantes caractérisent le domaine propre à chaque question.
+
+Le risque principal au niveau 1 est la menace de non-adoption à long terme (Munzner, 2014,
+ch. 2) : si l'outil ne répond pas aux véritables besoins des décideurs, il ne sera pas utilisé.
+Nous atténuons ce risque en ancrant chaque vue de chaque tableau de bord dans un objectif
+analytique précis, identifié ci-dessous.
 
 ### 2.2. Q1 — Prospérité des employeurs
 
-Le premier niveau du modèle imbriqué de Munzner (2014) consiste à caractériser le problème de
-domaine : qui sont les utilisateurs cibles, quelles décisions doivent-ils prendre, et quelles
-questions se posent-ils ?
+**Question.** *Quelles entreprises semblent prospères ? Lesquelles semblent en difficulté ?*
+L'utilisateur doit pouvoir répondre à cette question en explorant visuellement la dynamique
+économique des 253 employeurs du jeu de données.
 
-**Contexte.** Le VAST Challenge 2022 simule la ville fictive d'Engagement, Ohio, dont la
-municipalité dispose de données issues d'une application d'urbanisme participatif. Ces données
-couvrent les activités quotidiennes de 1 011 résidents sur 15 mois. La municipalité souhaite
-allouer une subvention de renouvellement urbain aux entreprises qui en ont le plus besoin.
+En l'absence de chiffre d'affaires directement disponible, nous définissons deux indicateurs
+indirects de santé économique :
 
-**Utilisateurs cibles.** Les décideurs municipaux chargés de l'allocation de cette subvention.
-Ils n'ont pas d'expertise en analyse de données et ont besoin d'un outil visuel leur permettant
-d'identifier rapidement quelles entreprises prospèrent et lesquelles sont en difficulté.
-
-**Question analytique (Q1).** *Quelles entreprises semblent prospères ? Lesquelles semblent en
-difficulté ?* L'utilisateur doit pouvoir répondre à cette question en explorant visuellement la
-dynamique économique des 253 employeurs du jeu de données.
+- **Prospérité** : croissance ou stabilité des effectifs accompagnée d'une masse salariale
+  constante ou croissante — signe que l'entreprise génère assez de revenus pour recruter et
+  rémunérer ses salariés.
+- **Difficulté** : baisse du nombre d'employés ou diminution drastique des salaires versés —
+  signal que l'entreprise n'a plus les moyens de soutenir son activité.
 
 **Objectifs analytiques.** La question Q1 se décompose en objectifs concrets :
 
@@ -83,18 +103,46 @@ dynamique économique des 253 employeurs du jeu de données.
 4. Vérifier si les indicateurs convergent (un employeur qui gagne en effectif gagne-t-il aussi
    en masse salariale ?).
 
-Le risque principal au niveau 1 est la menace de non-adoption à long terme (Munzner, 2014,
-ch. 2) : si l'outil ne répond pas aux véritables besoins des décideurs, il ne sera pas utilisé.
-Nous atténuons ce risque en ancrant chaque vue du tableau de bord dans un objectif analytique
-précis, identifié ci-dessus.
-
 ### 2.3. Q2 — Santé financière des résidents
 
-<!-- TODO -->
+**Question.** *Comment évoluent les revenus, les dépenses et l'épargne des résidents au fil des
+15 mois ?* Les décideurs municipaux souhaitent évaluer la qualité de vie des résidents et
+identifier ceux dont la situation financière se dégrade.
+
+Les données du Financial Journal enregistrent six catégories de transactions pour chaque
+résident : salaires (*Wage*), logement (*Shelter*), alimentation (*Food*), loisirs
+(*Recreation*), éducation (*Education*) et ajustements de loyer (*RentAdjustment*). La table
+Participants fournit les attributs démographiques (âge, taille du ménage, enfants, niveau
+d'éducation, jovialité).
+
+**Objectifs analytiques.** La question Q2 se décompose en objectifs concrets :
+
+1. Observer l'évolution des revenus et des dépenses des résidents au fil du temps.
+2. Comparer les profils financiers entre résidents pour distinguer les trajectoires favorables
+   des trajectoires défavorables.
+3. Identifier des clusters de résidents aux trajectoires similaires (amélioration, stabilité,
+   déclin).
+4. Détecter les résidents en situation extrême — outliers dont le solde net diverge fortement
+   de la tendance générale.
 
 ### 2.4. Q3 — Dynamique d'emploi et turnover
 
-<!-- TODO -->
+**Question.** *Quels employeurs connaissent un fort turnover, lesquels fidélisent leurs
+employés, et qu'est-ce qui caractérise chaque groupe ?* Les décideurs municipaux souhaitent
+examiner la stabilité de l'emploi pour orienter les politiques de soutien à l'emploi.
+
+Les Activity Logs enregistrent l'affectation de chaque résident à un emploi (*jobId*) à chaque
+pas de 5 minutes sur 15 mois. La table Jobs relie chaque emploi à un employeur et à un taux
+horaire. En croisant ces deux sources, il est possible de reconstituer les flux d'arrivées et
+de départs mensuels chez chaque employeur.
+
+**Objectifs analytiques.** La question Q3 se décompose en objectifs concrets :
+
+1. Analyser les patterns de turnover au fil du temps pour chaque employeur.
+2. Comparer la stabilité des employeurs entre eux pour distinguer les fidélisateurs des
+   employeurs à forte rotation.
+3. Identifier les employeurs aux extrêmes — fort turnover ou très grande stabilité.
+4. Corréler le turnover avec la taille de l'employeur et le niveau de rémunération.
 
 ---
 
