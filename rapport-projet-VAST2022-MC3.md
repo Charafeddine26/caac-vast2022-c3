@@ -53,8 +53,7 @@ Maraj, 2025) soumis en amont de l'implémentation, dont il reprend et approfondi
 
 Le premier niveau du modèle imbriqué de Munzner (2014) consiste à caractériser le problème de
 domaine : qui sont les utilisateurs cibles, quelles décisions doivent-ils prendre, et quelles
-questions se posent-ils ? La taxonomie des tâches (Ghoniem & Médoc, 2026, *Introduction*,
-p. 70–72) fournit le cadre pour décomposer chaque question en objectifs analytiques concrets.
+questions se posent-ils ?
 
 ### 2.1. Contexte général
 
@@ -178,9 +177,6 @@ le Financial Journal est croisé avec Jobs via `participantId` pour associer cha
 bon employeur.
 
 #### 3.1.2. Attributs et types de données
-
-La classification suit la taxonomie de Munzner (2014, ch. 2) telle que présentée dans le cours
-(Ghoniem & Médoc, 2026, *Introduction*, p. 32) :
 
 | Attribut | Type (Munzner) | Source | Volumétrie |
 |----------|---------------|--------|------------|
