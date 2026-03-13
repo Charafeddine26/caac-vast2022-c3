@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchQ3Data, selectQ3DataStatus } from "../store/Q3DataSlice.js";
 import Q3ControlBar from "./q3/controlbar/Q3ControlBar.jsx";
 import HeatmapContainer from "./q3/heatmap/HeatmapContainer.jsx";
+import TurnoverBarContainer from "./q3/turnoverbar/TurnoverBarContainer.jsx";
 import Q3Tooltip from "./q3/tooltip/Q3Tooltip.jsx";
 
 export default function Q3Dashboard() {
@@ -27,10 +28,7 @@ export default function Q3Dashboard() {
         <HeatmapContainer />
       </div>
       <div className="panels-row">
-        <div className="turnoverbar-panel">
-          <h3 className="panel-title">Turnover Ranking</h3>
-          <p style={{ color: "#999" }}>Panel H — coming next</p>
-        </div>
+        <TurnoverBarContainer />
         <div className="turnoverscatter-panel">
           <h3 className="panel-title">Turnover vs Employer Size</h3>
           <p style={{ color: "#999" }}>Panel I — coming next</p>
