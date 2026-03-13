@@ -767,8 +767,11 @@ normalisé par l'effectif pour permettre la comparaison entre employeurs de tail
 
 ## 6. Guide d'utilisation
 
-Le tableau de bord s'utilise selon le mantra de Shneiderman (1996) : vue d'ensemble d'abord,
-zoom et filtrage ensuite, détails à la demande enfin.
+L'application s'utilise selon le mantra de Shneiderman (1996) : vue d'ensemble d'abord, zoom
+et filtrage ensuite, détails à la demande enfin. La barre d'onglets en haut de l'interface
+permet de basculer entre les trois tableaux de bord (Q1, Q2, Q3).
+
+### 6.1. Onglet Q1 — Prospérité des employeurs
 
 **1. Vue d'ensemble.** Au chargement, les trois panneaux s'affichent simultanément. Le
 panneau A (séries temporelles) montre les 10 employeurs les plus prospères en vert et les 10
@@ -776,26 +779,50 @@ plus en difficulté en rouge, sur fond de l'ensemble des 253 courbes en gris. Le
 (barres divergentes) classe ces 20 employeurs par pente salariale. Le panneau C (nuage de
 points) positionne les 253 employeurs dans l'espace des deux pentes.
 
-**2. Zoom et filtrage.** La barre de contrôle en haut du tableau de bord contient un champ
-numérique « Show top/bottom » qui permet d'ajuster la valeur *N*. Augmenter *N* révèle
-davantage d'employeurs dans les panneaux A et B ; le réduire concentre l'attention sur les
-cas les plus extrêmes.
+**2. Zoom et filtrage.** La barre de contrôle contient un champ numérique « Show top/bottom »
+qui permet d'ajuster la valeur *N*. Augmenter *N* révèle davantage d'employeurs dans les
+panneaux A et B ; le réduire concentre l'attention sur les cas les plus extrêmes.
 
-**3. Sélection.** Un clic sur un employeur dans n'importe quel panneau le sélectionne : il
-est mis en surbrillance dans les trois vues simultanément. Plusieurs employeurs peuvent être
-sélectionnés successivement. Un second clic sur un employeur déjà sélectionné le
-désélectionne. Le bouton « Clear selection » réinitialise la sélection.
-
-**4. Exploration par survol.** Le passage du curseur sur un élément (ligne, barre ou point)
-met en relief l'employeur correspondant dans les trois panneaux et affiche une infobulle
-indiquant : l'identifiant de l'employeur, son effectif moyen, sa pente salariale, sa pente
+**3. Sélection et survol.** Un clic sur un employeur dans n'importe quel panneau le
+sélectionne dans les trois vues simultanément. Le survol affiche une infobulle contextuelle
+indiquant l'identifiant de l'employeur, son effectif moyen, sa pente salariale, sa pente
 d'effectif et sa masse salariale totale.
 
-**5. Lecture des quadrants (panneau C).** Les lignes de référence en pointillés à zéro
+**4. Lecture des quadrants (panneau C).** Les lignes de référence en pointillés à zéro
 divisent le nuage de points en quatre quadrants. Le quadrant supérieur droit regroupe les
-employeurs dont les deux indicateurs croissent (prospères) ; le quadrant inférieur gauche
-regroupe ceux dont les deux indicateurs déclinent (en difficulté). Les quadrants mixtes
+employeurs prospères ; le quadrant inférieur gauche ceux en difficulté. Les quadrants mixtes
 signalent des situations ambiguës méritant une investigation plus fine via les panneaux A et B.
+
+### 6.2. Onglet Q2 — Santé financière des résidents
+
+**1. Vue d'ensemble.** Le panneau D (aires empilées) montre l'évolution des dépenses par
+catégorie et du revenu pour l'ensemble des résidents. Le panneau E (boîtes à moustaches)
+affiche la distribution mensuelle du solde net. Le panneau F (nuage de points) positionne
+chaque résident dans l'espace des pentes, coloré par cluster.
+
+**2. Filtrage par cluster.** Un clic sur un cluster dans le panneau F reconfigure les
+panneaux D et E pour n'afficher que les données du cluster sélectionné, avec des lignes
+pointillées de référence représentant les médianes de l'ensemble des résidents (*focus +
+context*).
+
+**3. Exploration individuelle.** Le survol d'un résident dans le panneau F superpose sa
+trajectoire individuelle sur les boîtes à moustaches du panneau E, permettant de situer ce
+résident par rapport à la distribution générale. L'infobulle affiche le cluster
+d'appartenance, le revenu moyen, les pentes et le solde net moyen.
+
+### 6.3. Onglet Q3 — Dynamique d'emploi et turnover
+
+**1. Vue d'ensemble.** Le panneau G (carte de chaleur) montre le taux de turnover de chaque
+employeur mois par mois. Le panneau H (barres horizontales) classe les employeurs par turnover
+moyen. Le panneau I (nuage de points) croise l'effectif moyen et le turnover, dimensionné par
+les départs et coloré par le taux horaire.
+
+**2. Zoom et filtrage.** Le contrôle `topN` ajuste le nombre d'employeurs affichés dans les
+panneaux G et H — les *N* plus instables et les *N* plus stables.
+
+**3. Sélection et survol.** Même mécanisme que Q1 : le survol et le clic coordonnent les
+trois panneaux. L'infobulle affiche l'identifiant de l'employeur, son effectif moyen, son taux
+de turnover, son nombre total de départs et son rang de turnover.
 
 ---
 
