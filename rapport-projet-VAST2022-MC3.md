@@ -884,5 +884,6 @@ d'agrégation pour les structures cibles.
 - Ghoniem, M. & Médoc, N. (2026). *Introduction à la visualisation d'information* [support de cours]. M2 IHM.
 - Ghoniem, M. & Médoc, N. (2026). *Visualisation de données multidimensionnelles* [support de cours]. M2 IHM.
 - Médoc, N. (2026). Tutoriels Tuto1–Tuto7 [dépôts GitHub]. https://github.com/nicolasmedoc
-- VAST Challenge 2022, Mini-Challenge 3 — Economic Q1. https://vast-challenge.github.io/2022/
+- Pedregosa, F. *et al.* (2011). « Scikit-learn: Machine Learning in Python ». *Journal of Machine Learning Research*, 12, pp. 2825–2830.
+- VAST Challenge 2022, Mini-Challenge 3 — Economic (Q1, Q2, Q3). https://vast-challenge.github.io/2022/
 - Benerrazam, C. E., Mathis, A., Maniboda Ngouanat, L. C. & Maraj, A. (2025). *Rapport de conception de données — VAST Challenge 2022, Mini-challenge Économique (Q1)*.
