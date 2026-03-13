@@ -828,38 +828,52 @@ de turnover, son nombre total de départs et son rang de turnover.
 
 ## 7. Conclusion
 
-Ce rapport a présenté la conception et l'implémentation d'un tableau de bord interactif
-permettant d'évaluer la prospérité des 253 employeurs du jeu de données VAST Challenge 2022.
-L'approche est structurée selon les quatre niveaux du modèle imbriqué de Munzner (2014) :
+Ce rapport a présenté la conception et l'implémentation d'une application de visualisation
+interactive répondant aux trois questions économiques (Q1, Q2, Q3) du mini-challenge 3 du VAST
+Challenge 2022. L'approche est structurée selon les quatre niveaux du modèle imbriqué de
+Munzner (2014) :
 
-- Au **niveau 1** (domaine), nous avons identifié les besoins des décideurs municipaux et
-  formulé quatre objectifs analytiques découlant de la question Q1.
-- Au **niveau 2** (abstraction), nous avons caractérisé les données (tables, types d'attributs,
-  chemin de jointure) et traduit les objectifs en tâches abstraites selon la taxonomie de
-  Munzner.
-- Au **niveau 3** (encodage), nous avons conçu trois vues coordonnées — série temporelle,
-  barres divergentes et nuage de points — dont chaque canal visuel est justifié par le
-  principe d'efficacité des canaux enseigné dans le cours.
-- Au **niveau 4** (implémentation), nous avons réalisé le tableau de bord en suivant le patron
-  MVC avec séparation des responsabilités (classe D3 encapsulée + conteneur React + *store*
-  Redux), conformément à l'architecture des tutoriels du cours.
+- Au **niveau 1** (domaine), nous avons caractérisé les besoins des décideurs municipaux
+  d'Engagement, Ohio, et formulé les objectifs analytiques propres à chaque question :
+  prospérité des employeurs (Q1), santé financière des résidents (Q2) et dynamique d'emploi
+  (Q3).
+- Au **niveau 2** (abstraction), nous avons identifié les tables sources, classé les attributs
+  selon la taxonomie de Munzner (Ghoniem & Médoc, 2026, *Introduction*, p. 32), défini les
+  attributs dérivés (pentes, clusters, taux de turnover) et traduit les objectifs en tâches
+  abstraites (actions → cibles) selon la taxonomie du cours (*Introduction*, p. 70–72).
+- Au **niveau 3** (encodage), nous avons conçu neuf panneaux répartis en trois systèmes de
+  vues coordonnées — un par question. Chaque canal visuel est justifié par le principe
+  d'efficacité des canaux (*Introduction*, p. 34), la perception pré-attentive (*Introduction*,
+  p. 18) et les palettes de couleurs (*Introduction*, p. 53). Les techniques mobilisées
+  couvrent les séries temporelles, les diagrammes en barres, les nuages de points
+  multi-encodés, les aires empilées, les boîtes à moustaches et les cartes de chaleur —
+  illustrant les techniques axiales et basées sur les tableaux pour données
+  multidimensionnelles (Ghoniem & Médoc, 2026, *Multidimensionnelles*).
+- Au **niveau 4** (implémentation), nous avons réalisé l'application en suivant le patron MVC
+  avec séparation des responsabilités (classe D3 encapsulée + conteneur React + *store*
+  Redux), conformément à l'architecture des tutoriels Tuto4 et Tuto5 (Médoc, 2026).
+  L'interface à onglets, les sept *slices* Redux et les trois pipelines de prétraitement
+  (DuckDB + scikit-learn) assurent la modularité et la performance.
 
-**Limites.** Notre approche repose sur un indicateur indirect de prospérité — effectif et
-masse salariale — en l'absence de chiffre d'affaires dans le jeu de données. La pente
-linéaire utilisée comme mesure de tendance ne capte pas les ruptures brutales ni les variations
-saisonnières. Enfin, le jeu de données étant tabulaire, les cours sur la visualisation de
+**Limites.** Pour Q1, notre approche repose sur un indicateur indirect de prospérité (effectif
+et masse salariale) en l'absence de chiffre d'affaires dans le jeu de données. Pour Q2, le
+nombre de clusters est déterminé par la méthode du coude, qui peut être sensible à la
+normalisation choisie. Pour Q3, la détection d'arrivées et de départs repose sur une
+discrétisation mensuelle qui peut masquer des mouvements infra-mensuels. Enfin, la pente
+linéaire utilisée comme mesure de tendance (Q1, Q2) ne capte pas les ruptures brutales ni les
+variations saisonnières. Le jeu de données étant tabulaire, les cours sur la visualisation de
 graphes et de données hiérarchiques n'ont pas été directement mobilisés.
 
-**Perspectives.** Le tableau de bord pourrait être enrichi par un regroupement automatique des
-employeurs par clustering (*k*-means ou DBSCAN) pour faire émerger des profils de prospérité.
-Une animation temporelle (*small multiples* ou curseur de temps) permettrait d'observer les
-transitions mois par mois. L'ajout de données de fréquentation (CheckinJournal) pourrait
-élargir la définition de prospérité aux commerces de détail (restaurants, pubs).
+**Perspectives.** L'application pourrait être enrichie par une animation temporelle (*small
+multiples* ou curseur de temps) permettant d'observer les transitions mois par mois. L'ajout
+de données de fréquentation (CheckinJournal) pourrait élargir la définition de prospérité aux
+commerces de détail. Un quatrième onglet croisant les résultats des trois questions offrirait
+une vue intégrée de la dynamique économique de la ville.
 
 **Note.** Certaines métriques techniques et statistiques de volumétrie ont été extraites et
 vérifiées à l'aide d'une intelligence artificielle, notamment le décompte précis des lignes
 des jeux de données, le nombre exact d'identifiants uniques ainsi que la validation des calculs
-d'agrégation pour la structure cible.
+d'agrégation pour les structures cibles.
 
 ---
 
