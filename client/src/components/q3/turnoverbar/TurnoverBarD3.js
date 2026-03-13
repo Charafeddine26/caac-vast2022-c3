@@ -96,17 +96,17 @@ export default class TurnoverBarD3 {
           .attr("fill", (d) => topIds.has(d.employerId) ? "#d62728" : "#2ca02c")
           .attr("opacity", 0.8)
           .call((sel) => sel.transition().duration(500)
-            .attr("width", (d) => xScale(d.avg_turnover)))
-          .on("mouseenter", (event, d) => controllerMethods.handleHover(d.employerId))
-          .on("mouseleave", () => controllerMethods.handleUnhover())
-          .on("click", (event, d) => controllerMethods.handleClick(d.employerId)),
+            .attr("width", (d) => xScale(d.avg_turnover))),
         (update) => update.transition().duration(500)
           .attr("y", (d) => yScale(d.employerId))
           .attr("width", (d) => xScale(d.avg_turnover))
           .attr("height", yScale.bandwidth())
           .attr("fill", (d) => topIds.has(d.employerId) ? "#d62728" : "#2ca02c"),
         (exit) => exit.transition().duration(300).attr("width", 0).remove()
-      );
+      )
+      .on("mouseenter", (event, d) => controllerMethods.handleHover(d.employerId))
+      .on("mouseleave", () => controllerMethods.handleUnhover())
+      .on("click", (event, d) => controllerMethods.handleClick(d.employerId));
 
     // Axes
     this.xAxisG.transition().duration(500).call(
@@ -134,7 +134,6 @@ export default class TurnoverBarD3 {
 
       if (isHovered) {
         el.attr("opacity", 1).attr("stroke", "#000").attr("stroke-width", 2);
-        this.parentNode.appendChild(this);
       } else if (isSelected) {
         el.attr("opacity", 0.9).attr("stroke", "#000").attr("stroke-width", 1);
       } else {
