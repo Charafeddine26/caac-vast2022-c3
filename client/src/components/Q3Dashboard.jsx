@@ -5,6 +5,7 @@ import { fetchQ3Data, selectQ3DataStatus } from "../store/Q3DataSlice.js";
 import Q3ControlBar from "./q3/controlbar/Q3ControlBar.jsx";
 import HeatmapContainer from "./q3/heatmap/HeatmapContainer.jsx";
 import TurnoverBarContainer from "./q3/turnoverbar/TurnoverBarContainer.jsx";
+import TurnoverScatterContainer from "./q3/turnoverscatter/TurnoverScatterContainer.jsx";
 import Q3Tooltip from "./q3/tooltip/Q3Tooltip.jsx";
 
 export default function Q3Dashboard() {
@@ -29,10 +30,7 @@ export default function Q3Dashboard() {
       </div>
       <div className="panels-row">
         <TurnoverBarContainer />
-        <div className="turnoverscatter-panel">
-          <h3 className="panel-title">Turnover vs Employer Size</h3>
-          <p style={{ color: "#999" }}>Panel I — coming next</p>
-        </div>
+        <TurnoverScatterContainer />
       </div>
       <Q3Tooltip />
     </>
