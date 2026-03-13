@@ -148,11 +148,14 @@ de départs mensuels chez chaque employeur.
 
 ## 3. Abstraction des données et des tâches (Munzner — niveau 2)
 
-### 3.1. Q1 — données et tâches
-
 Le deuxième niveau du modèle imbriqué traduit le problème de domaine en termes abstraits :
 quelles sont les structures de données manipulées, quels types d'attributs portent-elles, et
-quelles opérations abstraites l'utilisateur doit-il effectuer ?
+quelles opérations abstraites l'utilisateur doit-il effectuer ? La classification des attributs
+suit la taxonomie de Munzner (2014, ch. 2) telle que présentée dans le cours (Ghoniem & Médoc,
+2026, *Introduction*, p. 32), et les tâches sont formulées selon la taxonomie actions → cibles
+(Ghoniem & Médoc, 2026, *Introduction*, p. 70–72).
+
+### 3.1. Q1 — données et tâches
 
 #### 3.1.1. Tables et chemin de jointure
 
@@ -228,11 +231,129 @@ Pour réaliser ces tâches, le pipeline de transformation applique les opératio
 
 ### 3.2. Q2 — données et tâches
 
-<!-- TODO -->
+#### 3.2.1. Tables et chemin de jointure
+
+Pour répondre à Q2, nous mobilisons deux sources de données :
+
+| Source | Fichier(s) | Lignes | Rôle |
+|--------|-----------|--------|------|
+| Financial Journal | `FinancialJournal.csv` | 1 856 330 | Table de faits : toutes les transactions (Wage, Shelter, Food, Recreation, Education, RentAdjustment) par résident et par date |
+| Participants | `Attributes/Participants.csv` | 1 011 | Table de dimension : attributs démographiques de chaque résident |
+
+Le chemin de jointure est direct :
+
+> **Financial Journal** (`participantId`) → **Participants** (`participantId`)
+
+#### 3.2.2. Attributs et types de données
+
+| Attribut | Type (Munzner) | Source | Volumétrie |
+|----------|---------------|--------|------------|
+| `participantId` | Catégoriel (identifiant) | Financial Journal + Participants | 1 011 résidents |
+| `timestamp` | Quantitatif ordonné | Financial Journal | 15 mois |
+| `category` | Catégoriel nominal | Financial Journal | 6 catégories de transactions |
+| `amount` | Quantitatif continu | Financial Journal | Montant de chaque transaction |
+| `age` | Quantitatif continu | Participants | Âge du résident |
+| `householdSize` | Quantitatif discret | Participants | Taille du ménage |
+| `haveKids` | Catégoriel binaire | Participants | Présence d'enfants |
+| `educationLevel` | Catégoriel ordinal | Participants | Niveau d'éducation |
+| `joviality` | Quantitatif continu | Participants | Score de bien-être subjectif |
+
+#### 3.2.3. Attributs dérivés
+
+Le pipeline de prétraitement Q2 (`preprocess_q2.py`) produit trois niveaux d'agrégation :
+
+| Attribut dérivé | Calcul | Signification |
+|-----------------|--------|---------------|
+| Revenu mensuel | `SUM(amount)` des lignes « Wage » par `participantId` et par mois | Salaire total perçu dans le mois |
+| Dépenses mensuelles par catégorie | `SUM(amount)` des lignes Shelter, Food, Recreation, Education par résident et par mois | Ventilation des postes de dépenses |
+| Solde net mensuel | Revenu − somme des dépenses | Capacité d'épargne (positif) ou déficit (négatif) |
+| Pente du revenu (`income_slope`) | Régression linéaire du revenu sur les 15 mois | Tendance haussière ou baissière du salaire |
+| Pente du solde net (`net_balance_slope`) | Régression linéaire du solde net sur les 15 mois | Trajectoire financière globale |
+| Cluster | KMeans sur `[avg_income, income_slope, avg_net_balance, net_balance_slope]`, *k* choisi par méthode du coude | Profil financier : Improving, Stable ou Declining |
+
+La structure cible comprend trois fichiers JSON : `residents_monthly.json` (séries temporelles
+par résident), `residents_summary.json` (résumé avec pentes, moyennes et cluster) et
+`cluster_meta.json` (centroïdes et tailles de clusters).
+
+#### 3.2.4. Abstraction des tâches
+
+Suivant la même taxonomie de Munzner (2014, ch. 3 ; Ghoniem & Médoc, 2026, *Introduction*,
+p. 70–72) :
+
+| Tâche | Action → Cible (Munzner) | Description |
+|-------|--------------------------|-------------|
+| Analyser les tendances revenu/dépenses | *Summarize* → *Trends* | Observer l'évolution des revenus et des dépenses au fil du temps, globalement et par cluster. |
+| Comparer les profils financiers | *Compare* → *Distribution* | Juxtaposer les distributions de solde net entre mois et entre clusters pour identifier les trajectoires divergentes. |
+| Identifier les clusters de résidents | *Discover* → *Clusters* | Faire émerger des groupes de résidents aux dynamiques financières similaires via le clustering KMeans. |
+| Détecter les outliers | *Discover* → *Outliers* | Repérer les résidents dont le solde net s'écarte fortement de la distribution — candidats à une investigation individuelle. |
+
+#### 3.2.5. Opérations sur les données
+
+1. **Jointure** : relier chaque transaction du Financial Journal au profil démographique du résident via `participantId`.
+2. **Filtrage et catégorisation** : séparer les transactions par catégorie (Wage, Shelter, Food, Recreation, Education).
+3. **Agrégation temporelle** : grouper par mois et par `participantId`, calculer revenus, dépenses et solde net.
+4. **Calcul de pente** : régression linéaire sur les 15 mois pour le revenu et le solde net de chaque résident.
+5. **Clustering** : normalisation des indicateurs, méthode du coude pour choisir *k*, puis KMeans (scikit-learn) sur les pentes et moyennes.
+6. **Export JSON** : trois fichiers structurés pour le chargement asynchrone côté client.
 
 ### 3.3. Q3 — données et tâches
 
-<!-- TODO -->
+#### 3.3.1. Tables et chemin de jointure
+
+Pour répondre à Q3, nous mobilisons deux sources de données :
+
+| Source | Fichier(s) | Lignes | Rôle |
+|--------|-----------|--------|------|
+| Activity Logs | `ParticipantStatusLogs{1..72}.csv` | 113 923 735 | Table de faits : affectation de chaque participant à un `jobId` à chaque pas de 5 min |
+| Jobs | `Attributes/Jobs.csv` | 1 328 | Table de dimension : relie chaque `jobId` à un `employerId` et un `hourlyRate` |
+
+Le chemin de jointure est le même que pour Q1 :
+
+> **Activity Logs** (`participantId`, `jobId`) → **Jobs** (`jobId` → `employerId`)
+
+#### 3.3.2. Attributs et types de données
+
+| Attribut | Type (Munzner) | Source | Volumétrie |
+|----------|---------------|--------|------------|
+| `participantId` | Catégoriel (identifiant) | Activity Logs | 1 011 participants |
+| `jobId` | Catégoriel (clé étrangère → Jobs) | Activity Logs + Jobs | 1 190 emplois utilisés |
+| `employerId` | Catégoriel (identifiant) | Jobs | 253 employeurs |
+| `hourlyRate` | Quantitatif continu | Jobs | Taux horaire associé à chaque emploi |
+| `timestamp` | Quantitatif ordonné | Activity Logs | 15 mois, pas de 5 min |
+
+#### 3.3.3. Attributs dérivés
+
+Le pipeline de prétraitement Q3 (`preprocess_q3.py`) reconstitue les flux de main-d'œuvre :
+
+| Attribut dérivé | Calcul | Signification |
+|-----------------|--------|---------------|
+| Affectation mensuelle | Dernier `jobId` observé par participant et par mois → `employerId` | Employeur courant de chaque résident pour un mois donné |
+| Arrivée | Premier mois d'apparition chez un employeur, ou changement d'employeur | Flux entrant de main-d'œuvre |
+| Départ | Dernier mois chez un employeur avant changement ou fin de données | Flux sortant de main-d'œuvre |
+| Taux de turnover mensuel | (arrivées + départs) / (2 × effectif) par employeur et par mois | Mesure normalisée de la rotation du personnel |
+| Ancienneté par stint | Nombre de mois consécutifs chez le même employeur | Fidélisation des employés |
+| Résumé employeur | `avg_headcount`, `avg_turnover`, `total_arrivals`, `total_departures`, `avg_tenure`, `avg_hourly_rate` | Profil synthétique de chaque employeur |
+
+La structure cible comprend deux fichiers JSON : `turnover_monthly.json` (séries temporelles
+de turnover par employeur) et `employers_turnover.json` (résumé par employeur).
+
+#### 3.3.4. Abstraction des tâches
+
+| Tâche | Action → Cible (Munzner) | Description |
+|-------|--------------------------|-------------|
+| Analyser les patterns de turnover | *Summarize* → *Trends* | Observer l'évolution du taux de turnover au fil des 15 mois pour chaque employeur. |
+| Comparer la stabilité des employeurs | *Compare* → *Trends* | Juxtaposer les profils de turnover entre employeurs pour distinguer les stables des instables. |
+| Identifier les extrêmes | *Discover* → *Outliers* | Repérer les employeurs au turnover le plus élevé et ceux à la rétention la plus forte. |
+| Corréler turnover et attributs | *Identify* → *Correlation* | Vérifier si le turnover est lié à la taille de l'employeur ou au niveau de rémunération. |
+
+#### 3.3.5. Opérations sur les données
+
+1. **Jointure** : résoudre l'`employerId` de chaque participant via Activity Logs ⋈ Jobs.
+2. **Agrégation temporelle** : pour chaque participant et chaque mois, identifier le dernier `jobId` observé (affectation mensuelle).
+3. **Détection des flux** : comparer les affectations mois à mois pour détecter les arrivées (nouvel employeur) et les départs (changement ou disparition).
+4. **Calcul du turnover** : agréger arrivées et départs par employeur et par mois, normaliser par l'effectif.
+5. **Calcul des résumés** : moyennes, totaux et ancienneté par employeur sur les 15 mois.
+6. **Export JSON** : deux fichiers structurés pour le chargement asynchrone côté client.
 
 ---
 
