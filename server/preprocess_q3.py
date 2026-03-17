@@ -69,18 +69,22 @@ df_sorted['prev_month'] = df_sorted.groupby('participantId')['month'].shift(1)
 
 # An arrival at employer X = first time this participant appears at X
 # (either their first month overall, or they switched from a different employer)
+# We exclude the absolute first month of the dataset to avoid counting the initial state as mass hiring.
+min_month = df_sorted['month'].min()
 df_sorted['is_arrival'] = (
-    df_sorted['prev_employer'].isna() |  # first month in dataset
-    (df_sorted['employerId'] != df_sorted['prev_employer'])  # changed employer
+    (df_sorted['employerId'] != df_sorted['prev_employer']) &
+    ~((df_sorted['prev_employer'].isna()) & (df_sorted['month'] == min_month))
 ).astype(int)
 
 # A departure from employer X = participant's employer next month is different or they disappear
 df_sorted['next_employer'] = df_sorted.groupby('participantId')['employerId'].shift(-1)
 df_sorted['next_month'] = df_sorted.groupby('participantId')['month'].shift(-1)
 
+# We exclude the absolute last month of the dataset to avoid counting the final state as mass firing.
+max_month = df_sorted['month'].max()
 df_sorted['is_departure'] = (
-    df_sorted['next_employer'].isna() |  # last month in dataset
-    (df_sorted['employerId'] != df_sorted['next_employer'])  # will change employer
+    (df_sorted['employerId'] != df_sorted['next_employer']) &
+    ~((df_sorted['next_employer'].isna()) & (df_sorted['month'] == max_month))
 ).astype(int)
 
 # ── Aggregate per employer per month ─────────────────────────────────────────

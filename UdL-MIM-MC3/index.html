@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UdL-MIM-MC3 — VAST Challenge 2022 Challenge 3</title>
+<style>
+body {
+    font-family: "Times New Roman", serif;
+    font-size: 12pt;
+    color: black;
+    margin: 1in;
+    line-height: 1.15;
+}
+
+h2 {
+    font-size: 18pt;
+    font-weight: bold;
+    margin: 0;
+}
+
+h3 {
+    font-size: 13.5pt;
+    font-weight: bold;
+    margin: 0;
+}
+
+p {
+    margin: 0 0 10pt 0;
+}
+
+a {
+    color: blue;
+    text-decoration: underline;
+}
+
+a:visited {
+    color: purple;
+}
+
+.calibri {
+    font-family: Calibri, sans-serif;
+    font-size: 11pt;
+}
+
+.arial {
+    font-family: Arial, sans-serif;
+    font-size: 11pt;
+}
+
+.center {
+    text-align: center;
+}
+
+.indent {
+    margin-left: 0.25in;
+}
+
+.divider {
+    border-bottom: 1pt solid black;
+    padding-bottom: 1pt;
+    margin-bottom: 10pt;
+}
+
+.answer {
+    font-family: Calibri, sans-serif;
+    font-size: 11pt;
+    margin: 10pt 0;
+}
+
+.answer p {
+    margin: 0 0 8pt 0;
+}
+
+.screenshot-placeholder {
+    border: 2px dashed #999;
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    margin: 10pt 0;
+    background: #f9f9f9;
+}
+</style>
+</head>
+<body>
+
+<h2 class="calibri center">Entry Name: "UdL-MIM-MC3"</h2>
+
+<h2 class="calibri center">VAST Challenge 2022<br><u>Challenge 3</u></h2>
+
+<h3 class="calibri">&nbsp;</h3>
+
+<h3 class="calibri">&nbsp;</h3>
+
+<h3 class="calibri">Team Members:</h3>
+
+<p class="calibri">
+Charaf Eddine Benerrazam, Universit&eacute; de Lorraine UFR MIM, <a href="mailto:charaf-eddine.benerrazam9@etu.univ-lorraine.fr">charaf-eddine.benerrazam9@etu.univ-lorraine.fr</a><br>
+Adrian Maraj, Universit&eacute; de Lorraine UFR MIM, <a href="mailto:adrian.maraj2@etu.univ-lorraine.fr">adrian.maraj2@etu.univ-lorraine.fr</a><br>
+Lynn Carla Maniboda Ngouanat, Universit&eacute; de Lorraine UFR MIM, <a href="mailto:lynn-carla.maniboda-ngouanat3@etu.univ-lorraine.fr">lynn-carla.maniboda-ngouanat3@etu.univ-lorraine.fr</a><br>
+Aurelien Mathis, Universit&eacute; de Lorraine UFR MIM, <a href="mailto:aurelien.mathis8@etu.univ-lorraine.fr">aurelien.mathis8@etu.univ-lorraine.fr</a>
+</p>
+
+<p class="calibri"><b>Student Team:</b> YES</p>
+
+<h3 class="calibri">Tools Used:</h3>
+
+<p class="calibri">
+<b>Python 3</b> (Flask, Pandas, DuckDB, scikit-learn) backend data preprocessing, API server, and KMeans clustering for resident financial profiling.<br><br>
+<b>JavaScript / D3.js v7</b> all interactive visualizations (time series, bar charts, scatterplots, heatmaps, stacked area charts, box plots) were built from scratch using D3.<br><br>
+<b>React 18 + Redux Toolkit</b> frontend application framework with coordinated views and state management across three dashboards.<br><br>
+<b>Vite</b> development server and production build tool for the client application.<br><br>
+<b>DataViz</b>, developed at Universit&eacute; de Lorraine, UFR MIM, Spring 2025, by the student team for the challenge. A custom multi-dashboard visual analytics application with three coordinated tabs covering employer prosperity (Q1), resident financial health (Q2), and employment dynamics (Q3). Source code available on GitHub.
+</p>
+
+<p class="calibri"><b>Approximately how many hours were spent working on this submission in total?</b></p>
+
+<p class="calibri">Approximately 80 hours across the entire team.</p>
+
+<p class="calibri"><b>Video</b></p>
+
+<p class="calibri"><b><!-- TODO: Replace with actual video link --><span style="background-color: yellow;">[TODO: Insert video link here]</span></b></p>
+
+<div class="divider"></div>
+
+<p class="arial">Use visual analytics to analyze the available data and develop responses to the questions to be provided. In addition, prepare a video that shows how you used visual analytics to solve this challenge.</p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<p class="calibri"><b>Questions</b></p>
+
+<!-- ==================== QUESTION 1 ==================== -->
+
+<p class="calibri"><b>1</b> - <span class="arial">Over the period covered by the dataset, which businesses appear to be more prosperous? Which appear to be struggling? Describe your rationale for your answers. Limit your response to 10 images and 500 words.</span></p>
+
+<div class="answer">
+
+<p>Our Q1 dashboard analyzes the economic health of all employers in Engagement over the 15-month period (March 2022 &ndash; May 2023) using three coordinated panels: a time-series chart of monthly total wages, a ranked bar chart, and a scatterplot of wage slope versus employee-count slope.</p>
+
+<p>For each employer, we computed monthly <b>total wages paid</b> and <b>employee count</b>, then fitted linear regressions to derive <b>wage_slope</b> and <b>employee_slope</b> as trend indicators. A key finding is that <b>every employer exhibits a negative wage slope</b>, indicating a systemic economic contraction across the entire city rather than isolated business failures.</p>
+
+<p><b>Prosperous businesses</b> are those whose wage decline is the least steep and whose workforce remains stable. In the time-series view, these employers maintain relatively flat wage trajectories near the top of the chart. Their scatterplot positions cluster near the origin (wage_slope &asymp; 0, employee_slope &asymp; 0), indicating resilience. These tend to be small, specialized employers with 1&ndash;3 employees and high workforce loyalty (average tenure of 15 months). Their total wage output, while modest in absolute terms, stays consistent, suggesting steady demand for their services.</p>
+
+<p><b>Struggling businesses</b> show the steepest negative wage slopes. The bar chart ranks employers by aggregate wages, revealing that some employers at the bottom experienced dramatic declines with wage slopes exceeding &minus;1,000 per month. In the scatterplot, these appear in the far-left region (strongly negative wage_slope) and often have negative employee_slope as well, indicating both pay cuts and workforce shrinkage. Some employers appear for only a few months before disappearing entirely, suggesting business closure or seasonal operations.</p>
+
+<p>The scatterplot&rsquo;s quadrant structure is particularly informative: the <b>bottom-left quadrant</b> (declining wages + declining headcount) identifies employers in the most distress, while the <b>top-right quadrant</b> is essentially empty no employer shows simultaneous wage and workforce growth. The coordinated brushing between all three panels allows analysts to select an employer in any view and trace its trajectory across all others, confirming patterns rather than relying on a single metric.</p>
+
+<p>In summary, prosperity in Engagement is relative: the most &ldquo;prosperous&rdquo; businesses are those best weathering a city-wide downturn, maintaining stable employment and minimizing wage erosion, while struggling businesses face compounding losses in both payroll and personnel.</p>
+
+<!-- TODO: Insert up to 10 screenshots from Q1 dashboard -->
+<div class="screenshot-placeholder">[TODO: Insert Q1 Dashboard screenshots time series, bar chart, and scatterplot views showing prosperous vs. struggling employers]</div>
+
+</div>
+
+<p>&nbsp;</p>
+
+<!-- ==================== QUESTION 2 ==================== -->
+
+<p class="calibri"><b>2</b> - <span class="arial">How does the financial health of the residents change over the period covered by the dataset? How do wages compare to the overall cost of living in Engagement? Are there groups that appear to exhibit similar patterns? Describe your rationale for your answers. Limit your response to 10 images and 500 words.</span></p>
+
+<p class="indent">&nbsp;</p>
+
+<div class="answer">
+
+<p>Our Q2 dashboard examines the financial health of all 1,011 residents through three linked visualizations: a stacked area chart comparing income to expenses, a box-plot of monthly net balance distributions, and a resident scatterplot colored by cluster membership.</p>
+
+<p>We aggregated each resident&rsquo;s monthly transactions into <b>income</b> (wages) and four expense categories: <b>food, shelter, recreation, and education</b>. The stacked area chart overlays total income against cumulative expenses, revealing that while expenses remain relatively stable over time, <b>income exhibits a gradual downward trend</b> consistent with the universal employer wage decline identified in Q1. The gap between income and expenses narrows over the study period, indicating increasing financial pressure on households.</p>
+
+<p>The box-plot panel tracks the <b>monthly net balance</b> (income minus expenses) distribution across all residents. The median net balance remains positive throughout the 15 months, but the interquartile range widens over time, signaling <b>growing inequality</b>: some residents maintain comfortable savings while others approach or cross into negative territory. Outliers at the bottom of the distribution reveal residents in acute financial distress.</p>
+
+<p>To identify groups with similar financial patterns, we applied <b>KMeans clustering</b> on four features: average income, income slope, average net balance, and net balance slope. This yielded four distinct clusters:</p>
+
+<ul>
+<li><b>Stable-High (494 residents)</b>: Moderate income (~$2,800/month), modest savings (~$1,336 net balance). The largest group, representing the working majority living within their means.</li>
+<li><b>Stable (311 residents)</b>: Higher income (~$5,041/month), comfortable buffer (~$3,667 net balance). Financially secure with stable trajectories.</li>
+<li><b>Improving (132 residents)</b>: Lower income (~$2,549/month) but the most positive net balance slope. Despite earning less, these residents demonstrate strong expense discipline, with finances trending upward.</li>
+<li><b>Declining (74 residents)</b>: The highest income (~$9,903/month) yet the worst financial trajectory. Despite earning far more than other groups, their net balance slope is the most negative, suggesting unsustainable spending, debt accumulation, or lifestyle inflation.</li>
+</ul>
+
+<p>The resident scatterplot (income_slope vs. net_balance_slope, sized by average income, colored by cluster) makes this paradox visually striking: the largest dots (highest earners) cluster in the declining zone, while smaller dots populate the improving region. This demonstrates that <b>income level alone does not predict financial health</b> spending behavior and adaptability matter more.</p>
+
+<p>Filtering the area chart by cluster reveals that the Declining group&rsquo;s expenses (particularly recreation and shelter) grow faster than their income, while the Improving group maintains flat expenses against slightly rising income.</p>
+
+<!-- TODO: Insert up to 10 screenshots from Q2 dashboard -->
+<div class="screenshot-placeholder">[TODO: Insert Q2 Dashboard screenshots stacked area chart, box plots, and resident scatter plot views by cluster]</div>
+
+</div>
+
+<!-- ==================== QUESTION 3 ==================== -->
+
+<p class="calibri"><b>3</b> - <span class="arial">Describe the health of the various employers within the city limits. What employment patterns do you observe? Do you notice any areas of particularly high or low turnover? Limit your response to 10 images and 500 words.</span></p>
+
+<div class="answer">
+
+<p>Our Q3 dashboard investigates employment dynamics across all employers using three coordinated panels: a turnover heatmap, a ranked turnover bar chart, and a scatter plot relating employer size, turnover rate, and hourly pay.</p>
+
+<p>We computed monthly <b>arrivals</b> and <b>departures</b> per employer by tracking each resident&rsquo;s job assignment changes across consecutive months. The <b>turnover rate</b> is defined as (arrivals + departures) / (2 &times; headcount), where 0 indicates no workforce change and values approaching 1 indicate near-complete staff replacement. We also derived <b>average tenure</b> (mean duration of employment stints) and merged <b>average hourly rate</b> from the jobs dataset.</p>
+
+<p><b>The heatmap</b> displays employer (rows) by month (columns), with color intensity encoding turnover rate. It is split into two sections the top N highest-turnover employers and the bottom N lowest-turnover employers, separated by a visual divider. The dominant pattern is <b>stability</b>: the majority of employers show consistently white or pale cells (turnover &asymp; 0), indicating that most of Engagement&rsquo;s labor market features long-term, loyal employment relationships. A few employers, however, display persistent red bands across all months, indicating <b>chronic high turnover</b>.</p>
+
+<p><b>The bar chart</b> ranks employers by average turnover, confirming a clear <b>bifurcated labor market</b>. Most employers cluster at the low end (avg_turnover &le; 0.07), with average tenure near 15 months employees stay for the entire study period. At the opposite extreme, a handful of employers exhibit turnover rates above 0.09, with average tenures of only 2&ndash;6 months, suggesting seasonal, temporary, or contract-based employment models.</p>
+
+<p><b>The scatter plot</b> (X = average headcount, Y = average turnover, size = total departures, color = average hourly rate) reveals important structural patterns:</p>
+
+<ul>
+<li><b>Low-turnover cluster</b>: Small employers (1&ndash;3 employees) with near-zero turnover, moderate pay (~$16/hr), and tiny departure dots. These appear to be specialized or family-style operations with high workforce stability.</li>
+<li><b>High-turnover outliers</b>: Medium-sized employers (4&ndash;7 employees) with elevated turnover, slightly higher pay (~$17&ndash;18/hr), and large departure dots. The higher pay does <b>not</b> prevent churn, suggesting turnover is driven by <b>job structure</b> (temporary contracts, seasonal demand) rather than wage competition.</li>
+<li>One extreme case shows turnover = 1.0 with only 1 month of activity, indicating a one-time temporary labor arrangement.</li>
+</ul>
+
+<p>Notably, there is <b>no strong temporal pattern</b> in the heatmap high-turnover employers remain high throughout, and stable employers remain stable. This absence of seasonal spikes suggests that employment dynamics in Engagement are structurally determined rather than cyclically driven. Combined with Q1&rsquo;s finding of universal wage decline, the picture is one of a <b>stable but contracting labor market</b>: employers retain their workers but pay them less over time.</p>
+
+<!-- TODO: Insert up to 10 screenshots from Q3 dashboard -->
+<div class="screenshot-placeholder">[TODO: Insert Q3 Dashboard screenshots heatmap, turnover bar chart, and scatter plot views]</div>
+
+</div>
+
+<p>&nbsp;</p>
+
+</body>
+</html>
